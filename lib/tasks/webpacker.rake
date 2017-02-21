@@ -5,6 +5,7 @@ namespace :webpacker do
   desc "Compile javascript packs using webpack for production with digests"
   task :compile => :environment do
     dist_dir = Rails.application.config.x.webpacker[:packs_dist_dir]
+    puts "dist_dir: #{dist_dir}"
     result   = `WEBPACK_DIST_DIR=#{dist_dir} NODE_ENV=production ./bin/webpack --json`
 
     exit! $?.exitstatus unless $?.success?
@@ -14,8 +15,11 @@ namespace :webpacker do
     end.to_json
 
     digests_path = Rails.application.config.x.webpacker[:digests_path]
+    puts "digests_path #{digests_path}"
     packs_path = Rails.root.join('public', dist_dir) || File.dirname(digests_path)
+    puts "packs_path #{packs_path}"
     packs_digests_path = digests_path || Rails.root.join(packs_path, 'digests.json')
+    puts "packs_digests_path #{packs_digests_path}"
 
     FileUtils.mkdir_p(packs_path)
     File.open(packs_digests_path, 'w+') { |file| file.write webpack_digests }

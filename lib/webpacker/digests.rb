@@ -32,6 +32,7 @@ class Webpacker::Digests
 
   private
     def load
+      puts "digests::load(#{@path})"
       if File.exist?(@path)
         JSON.parse(File.read(@path))
       else
